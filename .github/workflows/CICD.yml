@@ -19,7 +19,9 @@ jobs:
         steps:
             - name: Checkout Code
               uses: "actions/checkout@v4"
-            
+              with:
+                fetch-depth: 0
+
             - name: Update VM
               run: |
                 sudo apt-get update
@@ -36,6 +38,8 @@ jobs:
         steps:
             - name: Checkout Code
               uses: "actions/checkout@v4"
+              with:
+                fetch-depth: 0
 
             - name: Push to Epitech Repository
               uses: pixta-dev/repository-mirroring-action@v1
