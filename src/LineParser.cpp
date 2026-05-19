@@ -8,6 +8,7 @@
 #include "LineParser.hpp"
 #include <string>
 #include <iostream>
+#include <algorithm>
 
 void LineParser::Update_words(char delim)
 {
@@ -56,7 +57,7 @@ std::size_t LineParser::getNbWord()
 void LineParser::cleanChars(std::string CharsToRemove)
 {
     for (char c : CharsToRemove){
-        std::erase(_line, c);
+        _line.erase(std::remove(_line.begin(), _line.end(), c), _line.end());
     }
     Update_words(_delim);
 }
@@ -88,6 +89,14 @@ void LineParser::removeWord(std::size_t index)
         throw LineParser::ParserError("Invalid index on call removeWord()");
     }
     _words.erase(_words.begin() + index);
+}
+
+std::string &LineParser::operator[](std::size_t index)
+{
+    if (index >= getNbWord()){
+        throw LineParser::ParserError("index out of range");
+    }
+    return _words[index];
 }
 
 LineParser::LineParser()

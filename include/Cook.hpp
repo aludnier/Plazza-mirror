@@ -15,13 +15,13 @@ class Cook
 {
 private:
     std::thread _thrd;
-    Plazza::Order _currOrder;
+    Plazza::PizzaOrder _currOrder;
 public:
     Plazza::stock *_currStock;
     Cook();
     ~Cook();
 
-    void makePizza(Plazza::Order pizza);
+    void makePizza(Plazza::PizzaOrder pizza);
     void cookPizza();
     bool isAvailable();
 };

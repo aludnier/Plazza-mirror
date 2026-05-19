@@ -7,7 +7,7 @@
 
 #include "Cook.hpp"
 
-void Cook::makePizza(Plazza::Order pizza) 
+void Cook::makePizza(Plazza::PizzaOrder pizza) 
 {
     _currOrder = pizza;
     _thrd = std::thread(&Cook::cookPizza, this);
@@ -15,9 +15,9 @@ void Cook::makePizza(Plazza::Order pizza)
 
 void Cook::cookPizza() 
 {
-    std::cout << _thrd.get_id() <<"Making " << _currOrder.type << " size : " << _currOrder.type << std::endl;
+    std::cout << _thrd.get_id() <<"Making " << _currOrder._type << " size : " << _currOrder._type << std::endl;
     std::this_thread::sleep_for(std::chrono::milliseconds(2000));
-    std::cout << _thrd.get_id() << "finish Making " << _currOrder.type << " size : " << _currOrder.type << std::endl;
+    std::cout << _thrd.get_id() << "finish Making " << _currOrder._type << " size : " << _currOrder._type << std::endl;
 };
 
 bool Cook::isAvailable()

@@ -46,6 +46,8 @@ public:
     void replaceWord(std::size_t index, std::string newWord);
     std::string concatWords(std::string delim = " ");
     void removeWord(std::size_t index);
+
+    std::string &operator[](std::size_t index);
 };
 
 
