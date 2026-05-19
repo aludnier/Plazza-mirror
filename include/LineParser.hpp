@@ -37,7 +37,6 @@ public:
             };
     };
 
-    void readLineFrom(std::istream &stream, char delim = ' ');
     void ParseLine(std::string newline, char delim = ' ');
     std::size_t getNbWord();
     std::vector<std::string>& getWords();
