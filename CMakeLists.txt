@@ -8,6 +8,7 @@ set( PLAZZA_SOURCE
     ${PROJECT_SOURCE_DIR}/src/Cook.cpp
     ${PROJECT_SOURCE_DIR}/src/Kitchen.cpp
     ${PROJECT_SOURCE_DIR}/src/Reception.cpp
+    ${PROJECT_SOURCE_DIR}/src/LineParser.cpp
 )
 
 
