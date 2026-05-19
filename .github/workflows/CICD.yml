@@ -2,8 +2,8 @@ name: CI
 
 on:
     push:
-        branches: 
-            - main
+        branches-ignore:  
+            - "ga-ignore-*"
     pull_request: 
         branches:
             - main
@@ -28,9 +28,9 @@ jobs:
 
             - name: try Compile
               run: | 
-                make clean
-                make fclean
-                make re
+                rm -rf build/
+                cmake -B build/
+                cmake --build build
     
     push-to-mirror:
         needs: [check-build]
