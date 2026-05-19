@@ -25,7 +25,3 @@ public:
     bool takeOrder(std::list<Plazza::Order> &orders);
     void sendPizza(Plazza::Order &order);
 };
-
-Kitchen::~Kitchen()
-{
-}
