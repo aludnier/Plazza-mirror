@@ -22,6 +22,15 @@ void LineParser::Update_words(char delim)
     }
 }
 
+void LineParser::readLineFrom(std::istream &stream, char delim)
+{
+    _delim = delim;
+
+    std::getline(stream, _line);
+    Update_words(_delim);
+}
+
+
 std::string LineParser::getLine() 
 {
     return _line;
