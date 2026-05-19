@@ -28,9 +28,9 @@ jobs:
 
             - name: try Compile
               run: | 
-                make clean
-                make fclean
-                make re
+                rm -rf build/
+                cmake -B build/
+                cmake --build build
     
     push-to-mirror:
         needs: [check-build]
