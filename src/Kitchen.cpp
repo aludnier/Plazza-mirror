@@ -18,20 +18,20 @@ Kitchen::~Kitchen()
 {
 }
 
-bool Kitchen::takeOrder(std::list<Plazza::Order> &orders) 
+bool Kitchen::takeOrder(std::list<Plazza::PizzaOrder> &orders) 
 {
     if (orders.size() > 2 * _nbCooks) {
         return false;
     }
     while (!orders.empty()) {
-        Plazza::Order order = orders.back();
+        Plazza::PizzaOrder order = orders.back();
         orders.pop_back();
         sendPizza(order);
     }
     return true;
 };
 
-void Kitchen::sendPizza(Plazza::Order &order) 
+void Kitchen::sendPizza(Plazza::PizzaOrder &order) 
 {
     for (size_t i = 0; i < _nbCooks; i++) {
         if (_cooks[i]->isAvailable()) {

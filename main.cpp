@@ -5,7 +5,12 @@
 ** 
 */
 
+#include "Reception.hpp"
+
 int main()
 {
+    Reception shell;
+
+    shell.run(3);
     return 0;
 }

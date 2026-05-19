@@ -22,6 +22,6 @@ public:
     Kitchen(std::size_t nbCooks);
     ~Kitchen();
 
-    bool takeOrder(std::list<Plazza::Order> &orders);
-    void sendPizza(Plazza::Order &order);
+    bool takeOrder(std::list<Plazza::PizzaOrder> &orders);
+    void sendPizza(Plazza::PizzaOrder &order);
 };
