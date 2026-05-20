@@ -34,8 +34,30 @@ IPC &IPC::operator<<(const std::string &msg)
 IPC &IPC::operator>>(std::string &msg)
 {
     Buffer buff;
+
     if (msgrcv(_id, &buff, sizeof(buff.text), 1, IPC_NOWAIT) == -1)
         throw IPCError("msgrcv failed.");
     msg = buff.text;
+    return *this;
+}
+
+IPC &IPC::operator<<(const Plazza::PizzaOrder &order)
+{
+    Buffer buff;
+
+    buff.type = 1;
+    memcpy(buff.text, &order, sizeof(order));
+    if (msgsnd(_id, &buff, sizeof(buff.text), IPC_NOWAIT) == -1)
+        throw IPCError("msgsnd failed.");
+    return *this;
+}
+
+IPC &IPC::operator>>(Plazza::PizzaOrder &order)
+{
+    Buffer buff;
+
+    if (msgrcv(_id, &buff, sizeof(buff.text), 1, IPC_NOWAIT) == -1)
+        throw IPCError("msgrcv failed.");
+    memcpy(&order, buff.text, sizeof(order));
     return *this;
 }

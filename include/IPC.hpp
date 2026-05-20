@@ -31,6 +31,8 @@ class IPC
 
         IPC &operator<<(const std::string &msg);
         IPC &operator>>(std::string &msg);
+        IPC &operator<<(const Plazza::PizzaOrder &order);
+        IPC &operator>>(Plazza::PizzaOrder &order);
 
         class IPCError : public std::exception {
             private:
