@@ -13,14 +13,12 @@ std::list<Plazza::PizzaOrder> Reception::parseOrder()
     std::list<Plazza::PizzaOrder> orderlist;
 
     for (auto order : _parser.getWords()) {
-        std::cout << "Order : " << order << std::endl;
         orderparser.ParseLine(order);
-        for (auto s : orderparser.getWords()) {
-            std::cout << " : ";
-            std::cout << s << std::endl;
-        }
         try {
-            orderparser[2].erase(0);
+            if (orderparser[2].compare(0, 1, "x") != 0) {
+                throw std::exception();
+            }
+            orderparser[2].erase(0, 1);
             std::size_t nbPizza = std::atoi(orderparser[2].c_str());
             for (size_t i = 0; i < nbPizza; i++) {
                 orderlist.push_back(
@@ -29,7 +27,6 @@ std::list<Plazza::PizzaOrder> Reception::parseOrder()
         } catch(const std::exception& e) {
             std::cout << "wrong syntax : " << orderparser.getLine() << std::endl;
         }
-        std::cout << "-------------" << std::endl;
     }
     while (!orderlist.empty()) {
         std::cout << orderlist.back() << std::endl;
