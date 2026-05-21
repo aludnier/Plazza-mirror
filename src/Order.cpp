@@ -9,6 +9,23 @@
 
 namespace Plazza {
 
+std::vector<char> &operator<<(std::vector<char> &pack,const PizzaOrder &order)
+{
+    pack.push_back(order._type);
+    pack.push_back(order._size);
+    pack.push_back(order._cookTime);
+    return pack;
+}
+
+PizzaOrder operator>>(std::vector<char> &pack, PizzaOrder &order)
+{
+    order._cookTime = pack[2];
+    order._size = static_cast<PizzaSize>(pack[1]);
+    order._type = static_cast<PizzaType>(pack[0]);
+    return order;
+}
+
+
 std::ostream &operator<<(std::ostream &s ,const PizzaOrder &order)
     {
     s << "Order : ";
