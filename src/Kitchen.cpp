@@ -20,10 +20,12 @@ Kitchen::~Kitchen()
 
 bool Kitchen::takeOrder(std::list<Plazza::PizzaOrder> &orders)
 {
+    Plazza::PizzaOrder order;
+
     if (orders.size() > 2 * _nbCooks)
         return false;
     while (!orders.empty()) {
-        Plazza::PizzaOrder order = orders.back();
+        order = orders.back();
         orders.pop_back();
         _ipc << order;
     }
