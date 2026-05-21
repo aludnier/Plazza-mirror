@@ -9,6 +9,26 @@
 
 namespace Plazza {
 
+std::stack<char> &operator<<(std::stack<char> &pack,const PizzaOrder &order)
+{
+    pack.push(order._type);
+    pack.push(order._size);
+    pack.push(order._cookTime);
+    return pack;
+}
+
+PizzaOrder operator>>(std::stack<char> &pack, PizzaOrder &order)
+{
+    order._cookTime = pack.top();
+    pack.pop();
+    order._size = static_cast<PizzaSize>(pack.top());
+    pack.pop();
+    order._type = static_cast<PizzaType>(pack.top());
+    pack.pop();
+    return order;
+}
+
+
 std::ostream &operator<<(std::ostream &s ,const PizzaOrder &order)
     {
     s << "Order : ";
