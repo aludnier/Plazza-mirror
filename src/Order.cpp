@@ -9,22 +9,19 @@
 
 namespace Plazza {
 
-std::stack<char> &operator<<(std::stack<char> &pack,const PizzaOrder &order)
+std::vector<char> &operator<<(std::vector<char> &pack,const PizzaOrder &order)
 {
-    pack.push(order._type);
-    pack.push(order._size);
-    pack.push(order._cookTime);
+    pack.push_back(order._type);
+    pack.push_back(order._size);
+    pack.push_back(order._cookTime);
     return pack;
 }
 
-PizzaOrder operator>>(std::stack<char> &pack, PizzaOrder &order)
+PizzaOrder operator>>(std::vector<char> &pack, PizzaOrder &order)
 {
-    order._cookTime = pack.top();
-    pack.pop();
-    order._size = static_cast<PizzaSize>(pack.top());
-    pack.pop();
-    order._type = static_cast<PizzaType>(pack.top());
-    pack.pop();
+    order._cookTime = pack[2];
+    order._size = static_cast<PizzaSize>(pack[1]);
+    order._type = static_cast<PizzaType>(pack[0]);
     return order;
 }
 
