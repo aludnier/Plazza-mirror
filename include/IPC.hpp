@@ -12,11 +12,14 @@
     #include <sys/msg.h>
     #include <sys/ipc.h>
     #include <string.h>
+    #include <vector>
     #define BUFFER_SIZE 512
+
 struct Buffer
 {
     long type;
-    char text[BUFFER_SIZE];
+    // char text[BUFFER_SIZE];
+    std::vector<char> text;
 };
 
 class IPC
