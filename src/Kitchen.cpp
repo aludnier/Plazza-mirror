@@ -10,9 +10,19 @@
 Kitchen::Kitchen(std::size_t nbCooks, size_t mul) :
     _nbCooks(nbCooks)
 {
-    for (size_t i = 0; i < nbCooks; i++) {
+    for (size_t i = 0; i < nbCooks; i++)
         _cooks.push_back(std::make_unique<Cook>(mul));
-    }
+    stock = {
+        {Plazza::Ingredient::DOUGH, 10},
+        {Plazza::Ingredient::TOMATO, 10},
+        {Plazza::Ingredient::GRUYERE, 10},
+        {Plazza::Ingredient::HAM, 10},
+        {Plazza::Ingredient::MUSHROOMS, 10},
+        {Plazza::Ingredient::STEAK, 10},
+        {Plazza::Ingredient::EGGPLANT, 10},
+        {Plazza::Ingredient::GOAT_CHEESE, 10},
+        {Plazza::Ingredient::CHIEF_LOVE, 10}
+    };
 };
 
 Kitchen::~Kitchen()
@@ -53,4 +63,14 @@ void Kitchen::run()
             continue;
         }
     }
+}
+
+KitchenStatus Kitchen::getStatus() const
+{
+    size_t free_cooks = 0;
+
+    for (auto &cook : _cooks)
+        if (cook.get()->isAvailable())
+            free_cooks++;
+    return {free_cooks, stock};
 }

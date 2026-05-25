@@ -20,8 +20,7 @@ Cook::~Cook()
 void Cook::makePizza(Plazza::PizzaOrder pizza)
 {
 if (_thrd.joinable())
-        _thrd.join();
-
+    _thrd.join();
     _isAvailable = false;
     _currOrder = pizza;
     _thrd = std::thread(&Cook::cookPizza, this);

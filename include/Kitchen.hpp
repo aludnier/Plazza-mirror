@@ -20,7 +20,7 @@
 struct KitchenStatus
 {
     size_t occupancy;
-
+    std::unordered_map<Plazza::Ingredient, size_t> remaining_stock;
 };
 
 class Kitchen
@@ -41,6 +41,7 @@ class Kitchen
         void sendPizza(Plazza::PizzaOrder &order);
         void run();
         std::size_t getPID() { return _process.getPid();};
+        KitchenStatus getStatus() const;
         std::unordered_map<Plazza::Ingredient, size_t> stock;
 };
 
