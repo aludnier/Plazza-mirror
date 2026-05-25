@@ -6,6 +6,7 @@
 */
 
 #pragma once
+#include <iostream>
 
 namespace Plazza {
     
@@ -24,10 +25,38 @@ enum PizzaSize {
     XXL = 16
 };
 
-struct Order {
-    PizzaType type;
-    PizzaSize size;
+struct PizzaOrder {
+    PizzaType _type;
+    PizzaSize _size;
+    std::size_t _cookTime;
 };
+
+std::ostream &operator<<(std::ostream &s ,const PizzaOrder &order);
+
+struct ReginaOrder : public PizzaOrder
+{
+    ReginaOrder(PizzaSize size) :
+        PizzaOrder({Regina, size, 2}) {};
+};
+
+struct MargaritaOrder : public PizzaOrder
+{
+    MargaritaOrder(PizzaSize size) :
+        PizzaOrder({Margarita, size, 1}) {};
+};
+
+struct AmericanaOrder : public PizzaOrder
+{
+    AmericanaOrder(PizzaSize size) :
+        PizzaOrder({Americana, size, 2}) {};
+};
+
+struct FantasiaOrder : public PizzaOrder
+{
+    FantasiaOrder(PizzaSize size) :
+        PizzaOrder({Fantasia, size, 4}) {};
+};
+
 
 struct stock {
 

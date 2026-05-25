@@ -1,43 +1,53 @@
 /*
 ** EPITECH PROJECT, 2026
-** kitchne
+** kitchen
 ** File description:
-** 
+**
 */
 
 #include "Kitchen.hpp"
 
-Kitchen::Kitchen(std::size_t nbCooks) :
+Kitchen::Kitchen(std::size_t nbCooks, size_t mul) :
     _nbCooks(nbCooks)
 {
     for (size_t i = 0; i < nbCooks; i++) {
-        _cooks.push_back(std::make_unique<Cook>());
+        _cooks.push_back(std::make_unique<Cook>(mul));
     }
 };
 Kitchen::~Kitchen()
 {
 }
 
-bool Kitchen::takeOrder(std::list<Plazza::Order> &orders) 
+bool Kitchen::takeOrder(std::list<Plazza::PizzaOrder> &orders)
 {
-    if (orders.size() > 2 * _nbCooks) {
+    Plazza::PizzaOrder order;
+
+    if (orders.size() > 2 * _nbCooks)
         return false;
-    }
     while (!orders.empty()) {
-        Plazza::Order order = orders.back();
+        order = orders.back();
         orders.pop_back();
-        sendPizza(order);
+        _ipc << order;
     }
     return true;
 };
 
-void Kitchen::sendPizza(Plazza::Order &order) 
+void Kitchen::run()
 {
-    for (size_t i = 0; i < _nbCooks; i++) {
-        if (_cooks[i]->isAvailable()) {
-            _cooks[i]->makePizza(order);
+    Plazza::PizzaOrder order;
+
+    while (true) {
+        try {
+            _ipc >> order;
+            for (auto &cook : _cooks) {
+                if (cook->isAvailable()) {
+                    cook->makePizza(order);
+                    break;
+                }
+            }
+        } catch (const IPC::IPCError &e) {
+            std::cout << e.what() << std::endl;
+            continue;
         }
     }
-    
-};
-
+}

@@ -7,28 +7,65 @@
 
 #include "Reception.hpp"
 
-void Reception::run(std::size_t nbCooks)
+std::list<Plazza::PizzaOrder> Reception::parseOrder()
 {
-    Plazza::Order order = {Plazza::Regina, Plazza::S};
-    Kitchen kitchen (nbCooks);
-    std::list<Plazza::Order> orders;
-    for (size_t i = 0; i < 3; i++) {
-        orders.push_back(order);
-        order.type << 1;
-        order.size << 1;
+    LineParser orderparser;
+    std::list<Plazza::PizzaOrder> orderlist;
+
+    for (auto order : _parser.getWords()) {
+        orderparser.ParseLine(order);
+        try {
+            if (orderparser[2].compare(0, 1, "x") != 0) {
+                throw std::exception();
+            }
+            orderparser[2].erase(0, 1);
+            std::size_t nbPizza = std::atoi(orderparser[2].c_str());
+            for (size_t i = 0; i < nbPizza; i++) {
+                orderlist.push_back(
+                    _pizzaFunc[orderparser[0]](_sizes[orderparser[1]]));
+            }
+        } catch(const std::exception& e) {
+            std::cout << "wrong syntax : " << orderparser.getLine() << std::endl;
+        }
+    }
+    while (!orderlist.empty()) {
+        std::cout << orderlist.back() << std::endl;
+        orderlist.pop_back();
     }
     
+    return orderlist;
+}
+
+void Reception::run()
+{
+    Plazza::PizzaOrder order = {Plazza::Regina, Plazza::S};
+    Kitchen kitchen (_nbCooks, _mul);
+    std::list<Plazza::PizzaOrder> orders;
+    std::string commandLine;
+
     while (true) {
-        kitchen.takeOrder(orders);
-        sleep(40);
+        createKitchen(5);
+        _parser.readLineFrom(std::cin, ';');
+        if (_parser.getLine() == "quit") {
+            break;
+        }
+        parseOrder();
     }
-    
 };
 
-Reception::Reception(/* args */)
+Reception::Reception(std::size_t nbCooks, std::size_t mul) :
+    _nbCooks(nbCooks), _mul(mul)
 {
 }
 
 Reception::~Reception()
 {
+}
+
+void Reception::createKitchen(std::size_t nbKitchen)
+{
+    for (std::size_t i = 0; i < nbKitchen; i++) {
+        _kitchens.push_back(std::make_unique<Kitchen>(_nbCooks, _mul));
+        sleep(2);
+    }
 }

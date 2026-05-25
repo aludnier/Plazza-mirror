@@ -12,15 +12,36 @@
 #include <list>
 #include <unistd.h>
 #include "Order.hpp"
-
+#include "LineParser.hpp"
+#include <unordered_map>
+#include "functional"
 class Reception
 {
-private:
-    std::deque<Kitchen> _kitchens;
 public:
-    Reception(/* args */);
+    Reception(std::size_t nbCooks, std::size_t mul);
     ~Reception();
 
-    void run(std::size_t nbCooks);
+    std::list<Plazza::PizzaOrder> parseOrder();
+    void run();
+    void createKitchen(std::size_t nbKitchen);
+private:
+    std::size_t _nbCooks;
+    std::vector<std::unique_ptr<Kitchen>> _kitchens;
+    LineParser _parser;
+    std::size_t _mul;
 
+    std::unordered_map<std::string, std::function<Plazza::PizzaOrder(Plazza::PizzaSize)>> _pizzaFunc =  {
+        {"Regina", [](Plazza::PizzaSize size) -> Plazza::PizzaOrder {return Plazza::ReginaOrder(size);}},
+        {"Margarita", [](Plazza::PizzaSize size) -> Plazza::PizzaOrder {return Plazza::MargaritaOrder(size);}},
+        {"Americana", [](Plazza::PizzaSize size) -> Plazza::PizzaOrder {return Plazza::AmericanaOrder(size);}},
+        {"Fantasia", [](Plazza::PizzaSize size) -> Plazza::PizzaOrder {return Plazza::FantasiaOrder(size);}}
+    };
+
+    std::unordered_map<std::string, Plazza::PizzaSize> _sizes = {
+        {"S", Plazza::S},
+        {"M", Plazza::M},
+        {"L", Plazza::L},
+        {"XL", Plazza::XL},
+        {"XXL", Plazza::XXL}
+    };
 };
