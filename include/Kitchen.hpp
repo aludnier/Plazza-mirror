@@ -17,6 +17,12 @@
     #include "Process.hpp"
     #include <functional>
 
+struct KitchenStatus
+{
+    size_t occupancy;
+
+};
+
 class Kitchen
 {
     private:
@@ -35,6 +41,7 @@ class Kitchen
         void sendPizza(Plazza::PizzaOrder &order);
         void run();
         std::size_t getPID() { return _process.getPid();};
+        std::unordered_map<Plazza::Ingredient, size_t> stock;
 };
 
 #endif /* !KITCHEN_HPP_ */
