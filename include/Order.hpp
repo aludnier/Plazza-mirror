@@ -8,22 +8,22 @@
 #pragma once
 #include <iostream>
 #include <vector>
-
+#include <list>
 
 namespace Plazza
 {
 
 enum Ingredient
 {
-    DOUGH,
-    TOMATO,
-    GRUYERE,
-    HAM,
-    MUSHROOMS,
-    STEAK,
-    EGGPLANT,
-    GOAT_CHEESE,
-    CHIEF_LOVE
+    DOUGH = 1,
+    TOMATO = 2,
+    GRUYERE = 4,
+    HAM = 8,
+    MUSHROOMS = 16,
+    STEAK = 32,
+    EGGPLANT = 64,
+    GOAT_CHEESE = 128,
+    CHIEF_LOVE = 256
 };
 
 enum PizzaType {
@@ -52,6 +52,7 @@ std::vector<char> &operator<<(std::vector<char> &pack,const PizzaOrder &order);
 PizzaOrder operator>>(std::vector<char> &pack, PizzaOrder &order);
 
 std::ostream &operator<<(std::ostream &s ,const PizzaOrder &order);
+std::ostream &operator<<(std::ostream &s ,const Ingredient &ingredient);
 
 struct ReginaOrder : public PizzaOrder
 {

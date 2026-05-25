@@ -47,7 +47,7 @@ IPC &IPC::operator<<(const Plazza::PizzaOrder &order)
     Buffer buff;
 
     buff.type = 1;
-    memcpy(buff.text.data(), &order, sizeof(order));
+    buff.text << order;
     if (msgsnd(_id, &buff, sizeof(buff.text), IPC_NOWAIT) == -1)
         throw IPCError("msgsnd failed.");
     return *this;
@@ -59,6 +59,6 @@ IPC &IPC::operator>>(Plazza::PizzaOrder &order)
 
     if (msgrcv(_id, &buff, sizeof(buff.text), 1, IPC_NOWAIT) == -1)
         throw IPCError("msgrcv failed.");
-    memcpy(&order, buff.text.data(), sizeof(order));
+    buff.text >> order;
     return *this;
 }
