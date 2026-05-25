@@ -42,6 +42,7 @@ class Kitchen
         void run();
         std::size_t getPID() { return _process.getPid();};
         KitchenStatus getStatus() const;
+        // std::shared_ptr<std::unordered_map<Plazza::Ingredient, size_t>> stock;
         std::unordered_map<Plazza::Ingredient, size_t> stock;
 };
 

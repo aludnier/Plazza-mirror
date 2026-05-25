@@ -12,8 +12,7 @@
 namespace Plazza
 {
 
-enum Ingredient
-{
+enum Ingredient {
     DOUGH,
     TOMATO,
     GRUYERE,

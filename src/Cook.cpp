@@ -5,9 +5,10 @@
 **
 */
 
-#include "../include/Cook.hpp"
+#include "Cook.hpp"
 
-Cook::Cook(size_t mul) : _isAvailable(true), _mul(mul)
+Cook::Cook(size_t mul, std::unordered_map<Plazza::Ingredient, size_t> &stock)
+    : _isAvailable(true), _mul(mul), _stock(stock)
 {
 }
 
@@ -32,6 +33,8 @@ void Cook::cookPizza()
         << _currOrder._type << " size " << _currOrder._size << "\n";
     std::this_thread::sleep_for(
         std::chrono::milliseconds(_currOrder._cookTime * 1000 * _mul));
+    ScopedLock mut(_mutex);
+    useStock(_currOrder);
     std::cout << "[Cook " << _thrd.get_id() << "] Done!\n";
     _isAvailable = true;
 };
@@ -40,3 +43,13 @@ bool Cook::isAvailable() const
 {
     return _isAvailable;
 };
+
+bool Cook::useStock(const Plazza::PizzaOrder &order)
+{
+    for (const auto &i : order._recipe)
+        if (_stock[i] == 0)
+            return false;
+    for (const auto &i : order._recipe)
+        _stock[i]--;
+    return true;
+}
