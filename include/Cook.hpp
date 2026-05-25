@@ -17,9 +17,11 @@ private:
     std::thread _thrd;
     Plazza::PizzaOrder _currOrder;
     bool _isAvailable;
+    size_t _mul;
+
 public:
     Plazza::stock *_currStock;
-    Cook();
+    Cook(size_t mul);
     ~Cook();
 
     void makePizza(Plazza::PizzaOrder pizza);

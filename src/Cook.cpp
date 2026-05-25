@@ -7,7 +7,7 @@
 
 #include "../include/Cook.hpp"
 
-Cook::Cook() : _isAvailable(true)
+Cook::Cook(size_t mul) : _isAvailable(true), _mul(mul)
 {
 }
 
@@ -32,7 +32,7 @@ void Cook::cookPizza()
     std::cout << "Cook " << _thrd.get_id() << " Making pizza type "
         << _currOrder._type << " size " << _currOrder._size << "\n";
     std::this_thread::sleep_for(
-        std::chrono::milliseconds(_currOrder._cookTime * 1000));
+        std::chrono::milliseconds(_currOrder._cookTime * 1000 * _mul));
     std::cout << "[Cook " << _thrd.get_id() << "] Done!\n";
     _isAvailable = true;
 };
