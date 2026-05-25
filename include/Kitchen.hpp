@@ -26,7 +26,6 @@ class Kitchen
         std::size_t _currLoad;
         std::queue<Plazza::PizzaOrder> _waitingOrders;
         IPC _ipc;
-        pid_t _pid;
 
     public:
         Kitchen(std::size_t nbCooks);
@@ -35,6 +34,7 @@ class Kitchen
         bool takeOrder(std::list<Plazza::PizzaOrder> &orders);
         void sendPizza(Plazza::PizzaOrder &order);
         void run();
+        std::size_t getPID() { return _process.getPid();};
 };
 
 #endif /* !KITCHEN_HPP_ */

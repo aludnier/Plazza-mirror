@@ -7,6 +7,22 @@
 
 #include "Reception.hpp"
 
+
+Reception::Reception(std::size_t nbCooks) :
+    _nbCooks(nbCooks),
+    _ipc(std::make_shared<IPC>())
+{
+}
+
+Reception::~Reception()
+{
+    for (size_t i = 0; i < _kitchens.size(); i++) {
+        _kitchens.erase(_kitchens.begin());
+    }
+    
+}
+
+
 std::list<Plazza::PizzaOrder> Reception::parseOrder()
 {
     LineParser orderparser;
@@ -39,12 +55,11 @@ std::list<Plazza::PizzaOrder> Reception::parseOrder()
 void Reception::run()
 {
     Plazza::PizzaOrder order = {Plazza::Regina, Plazza::S};
-    Kitchen kitchen (_nbCooks);
     std::list<Plazza::PizzaOrder> orders;
     std::string commandLine;
 
+    createKitchen(5);
     while (true) {
-        createKitchen(5);
         _parser.readLineFrom(std::cin, ';');
         if (_parser.getLine() == "quit") {
             break;
@@ -52,15 +67,6 @@ void Reception::run()
         parseOrder();
     }
 };
-
-Reception::Reception(std::size_t nbCooks) :
-    _nbCooks(nbCooks)
-{
-}
-
-Reception::~Reception()
-{
-}
 
 void Reception::createKitchen(std::size_t nbKitchen)
 {
