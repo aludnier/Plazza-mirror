@@ -14,10 +14,13 @@
     #include "IPC.hpp"
     #include <list>
     #include <memory>
+    #include "Process.hpp"
+    #include <functional>
 
 class Kitchen
 {
     private:
+        Process<std::function<void()>> _process;
         std::size_t _nbCooks;
         std::vector<std::unique_ptr<Cook>> _cooks;
         std::size_t _currLoad;
