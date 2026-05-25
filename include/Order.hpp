@@ -7,6 +7,7 @@
 
 #pragma once
 #include <iostream>
+#include <vector>
 
 
 namespace Plazza
@@ -46,6 +47,9 @@ struct PizzaOrder {
     std::size_t _cookTime;
     std::list<Ingredient> _recipe;
 };
+
+std::vector<char> &operator<<(std::vector<char> &pack,const PizzaOrder &order);
+PizzaOrder operator>>(std::vector<char> &pack, PizzaOrder &order);
 
 std::ostream &operator<<(std::ostream &s ,const PizzaOrder &order);
 
