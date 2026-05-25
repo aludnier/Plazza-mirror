@@ -39,7 +39,7 @@ std::list<Plazza::PizzaOrder> Reception::parseOrder()
 void Reception::run()
 {
     Plazza::PizzaOrder order = {Plazza::Regina, Plazza::S};
-    Kitchen kitchen (_nbCooks);
+    Kitchen kitchen (_nbCooks, _mul);
     std::list<Plazza::PizzaOrder> orders;
     std::string commandLine;
 
@@ -53,8 +53,8 @@ void Reception::run()
     }
 };
 
-Reception::Reception(std::size_t nbCooks) :
-    _nbCooks(nbCooks)
+Reception::Reception(std::size_t nbCooks, std::size_t mul) :
+    _nbCooks(nbCooks), _mul(mul)
 {
 }
 
@@ -65,7 +65,7 @@ Reception::~Reception()
 void Reception::createKitchen(std::size_t nbKitchen)
 {
     for (std::size_t i = 0; i < nbKitchen; i++) {
-        _kitchens.push_back(std::make_unique<Kitchen>(_nbCooks));
+        _kitchens.push_back(std::make_unique<Kitchen>(_nbCooks, _mul));
         sleep(2);
     }
 }

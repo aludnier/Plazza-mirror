@@ -9,7 +9,7 @@
 
 int main()
 {
-    Reception shell(3);
+    Reception shell(3, 2);
 
     shell.run();
     return 0;
