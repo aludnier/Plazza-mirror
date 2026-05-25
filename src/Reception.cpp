@@ -58,7 +58,6 @@ void Reception::run()
     std::list<Plazza::PizzaOrder> orders;
     std::string commandLine;
 
-    createKitchen(5);
     while (true) {
         _parser.readLineFrom(std::cin, ';');
         if (_parser.getLine() == "quit") {
