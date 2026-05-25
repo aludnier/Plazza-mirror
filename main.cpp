@@ -9,8 +9,8 @@
 
 int main()
 {
-    Reception shell;
+    Reception shell(3);
 
-    shell.run(3);
+    shell.run();
     return 0;
 }

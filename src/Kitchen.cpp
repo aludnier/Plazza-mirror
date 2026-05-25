@@ -13,6 +13,7 @@ Kitchen::Kitchen(std::size_t nbCooks) :
     for (size_t i = 0; i < nbCooks; i++) {
         _cooks.push_back(std::make_unique<Cook>());
     }
+    _process.startProcess([this]() {run();});
 };
 Kitchen::~Kitchen()
 {

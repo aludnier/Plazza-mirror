@@ -18,13 +18,15 @@
 class Reception
 {
 public:
-    Reception(/* args */);
+    Reception(std::size_t nbCooks);
     ~Reception();
 
     std::list<Plazza::PizzaOrder> parseOrder();
-    void run(std::size_t nbCooks);
+    void run();
+    void createKitchen(std::size_t nbKitchen);
 private:
-    std::deque<Kitchen> _kitchens;
+    std::size_t _nbCooks;
+    std::vector<std::unique_ptr<Kitchen>> _kitchens;
     LineParser _parser;
 
     std::unordered_map<std::string, std::function<Plazza::PizzaOrder(Plazza::PizzaSize)>> _pizzaFunc =  {
