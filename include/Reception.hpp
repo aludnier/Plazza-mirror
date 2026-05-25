@@ -15,6 +15,7 @@
 #include "LineParser.hpp"
 #include <unordered_map>
 #include "functional"
+#include "IPC.hpp"
 class Reception
 {
 public:
@@ -26,8 +27,10 @@ public:
     void createKitchen(std::size_t nbKitchen);
 private:
     std::size_t _nbCooks;
+
     std::vector<std::unique_ptr<Kitchen>> _kitchens;
     LineParser _parser;
+    std::shared_ptr<IPC> _ipc;
     std::size_t _mul;
 
     std::unordered_map<std::string, std::function<Plazza::PizzaOrder(Plazza::PizzaSize)>> _pizzaFunc =  {

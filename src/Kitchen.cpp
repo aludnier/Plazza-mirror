@@ -14,8 +14,10 @@ Kitchen::Kitchen(std::size_t nbCooks, size_t mul) :
         _cooks.push_back(std::make_unique<Cook>(mul));
     }
 };
+
 Kitchen::~Kitchen()
 {
+    _process.waitForProcess();
 }
 
 bool Kitchen::takeOrder(std::list<Plazza::PizzaOrder> &orders)
@@ -35,6 +37,7 @@ bool Kitchen::takeOrder(std::list<Plazza::PizzaOrder> &orders)
 void Kitchen::run()
 {
     Plazza::PizzaOrder order;
+    int tmp = 0;
 
     while (true) {
         try {
