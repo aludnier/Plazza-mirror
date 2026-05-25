@@ -8,8 +8,9 @@
 #include "Reception.hpp"
 
 
-Reception::Reception(std::size_t nbCooks) :
+Reception::Reception(std::size_t nbCooks, std::size_t mul) :
     _nbCooks(nbCooks),
+    _mul(mul),
     _ipc(std::make_shared<IPC>())
 {
 }
