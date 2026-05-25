@@ -19,7 +19,7 @@
 class Reception
 {
 public:
-    Reception(std::size_t nbCooks);
+    Reception(std::size_t nbCooks, std::size_t mul);
     ~Reception();
 
     std::list<Plazza::PizzaOrder> parseOrder();
@@ -31,6 +31,7 @@ private:
     std::vector<std::unique_ptr<Kitchen>> _kitchens;
     LineParser _parser;
     std::shared_ptr<IPC> _ipc;
+    std::size_t _mul;
 
     std::unordered_map<std::string, std::function<Plazza::PizzaOrder(Plazza::PizzaSize)>> _pizzaFunc =  {
         {"Regina", [](Plazza::PizzaSize size) -> Plazza::PizzaOrder {return Plazza::ReginaOrder(size);}},

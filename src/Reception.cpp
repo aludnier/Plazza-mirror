@@ -70,7 +70,7 @@ void Reception::run()
 void Reception::createKitchen(std::size_t nbKitchen)
 {
     for (std::size_t i = 0; i < nbKitchen; i++) {
-        _kitchens.push_back(std::make_unique<Kitchen>(_nbCooks));
+        _kitchens.push_back(std::make_unique<Kitchen>(_nbCooks, _mul));
         sleep(2);
     }
 }

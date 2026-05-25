@@ -5,15 +5,14 @@
 **
 */
 
-#include "../include/Kitchen.hpp"
+#include "Kitchen.hpp"
 
-Kitchen::Kitchen(std::size_t nbCooks) :
+Kitchen::Kitchen(std::size_t nbCooks, size_t mul) :
     _nbCooks(nbCooks)
 {
     for (size_t i = 0; i < nbCooks; i++) {
-        _cooks.push_back(std::make_unique<Cook>());
+        _cooks.push_back(std::make_unique<Cook>(mul));
     }
-    _process.startProcess([this]() {run();});
 };
 
 Kitchen::~Kitchen()
@@ -49,8 +48,9 @@ void Kitchen::run()
                     break;
                 }
             }
-        } catch (const IPC::IPCError &) {
-            // do something
+        } catch (const IPC::IPCError &e) {
+            std::cout << e.what() << std::endl;
+            continue;
         }
     }
 }

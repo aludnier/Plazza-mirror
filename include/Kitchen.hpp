@@ -28,7 +28,7 @@ class Kitchen
         IPC _ipc;
 
     public:
-        Kitchen(std::size_t nbCooks);
+        Kitchen(size_t nbCooks, size_t mul);
         ~Kitchen();
 
         bool takeOrder(std::list<Plazza::PizzaOrder> &orders);
