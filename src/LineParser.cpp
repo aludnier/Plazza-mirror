@@ -2,7 +2,7 @@
 ** EPITECH PROJECT, 2026
 ** lineparser
 ** File description:
-** 
+** LineParser class
 */
 
 #include "LineParser.hpp"
@@ -32,7 +32,7 @@ void LineParser::readLineFrom(std::istream &stream, char delim)
 }
 
 
-std::string LineParser::getLine() 
+std::string LineParser::getLine()
 {
     return _line;
 }
@@ -64,9 +64,8 @@ void LineParser::cleanChars(std::string CharsToRemove)
 
 void LineParser::replaceWord(std::size_t index, std::string newWord)
 {
-    if (index >= _words.size()){
+    if (index >= _words.size())
         throw LineParser::ParserError("Invalid index on call replaceWord()");
-    }
     _words[index] = newWord;
 }
 
@@ -76,7 +75,7 @@ std::string LineParser::concatWords(std::string delim)
     std::size_t index = 0;
     std::size_t maxWordIndex = _words.size() - 1;
 
-    while (index <= maxWordIndex){
+    while (index <= maxWordIndex) {
         newLine += _words[index] + ((index == maxWordIndex) ? "" : delim);
         index++;
     }
@@ -85,17 +84,15 @@ std::string LineParser::concatWords(std::string delim)
 
 void LineParser::removeWord(std::size_t index)
 {
-    if (index >= _words.size()){
+    if (index >= _words.size())
         throw LineParser::ParserError("Invalid index on call removeWord()");
-    }
     _words.erase(_words.begin() + index);
 }
 
 std::string &LineParser::operator[](std::size_t index)
 {
-    if (index >= getNbWord()){
+    if (index >= getNbWord())
         throw LineParser::ParserError("index out of range");
-    }
     return _words[index];
 }
 

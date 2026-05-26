@@ -7,8 +7,9 @@
 
 #include "Cook.hpp"
 
-Cook::Cook(size_t mul, std::unordered_map<Plazza::Ingredient, size_t> &stock)
-    : _isAvailable(true), _mul(mul), _stock(stock)
+Cook::Cook(double mul, std::unordered_map<Plazza::Ingredient, size_t> &stock,
+    size_t time)
+    : _isAvailable(true), _mul(mul), _stock(stock), _time(time)
 {
 }
 
@@ -34,13 +35,13 @@ void Cook::cookPizza()
     ScopedLock mut(_mutex);
     useStock(_currOrder);
     std::this_thread::sleep_for(
-        std::chrono::milliseconds(_currOrder._cookTime * 1000 * _mul));
+        std::chrono::milliseconds(_currOrder._cookTime * _time * _mul));
     std::cout << "[Cook " << _thrd.get_id() << "] Done!\n";
     _isAvailable = true;
 };
 
 bool Cook::isAvailable() const
-{   
+{
     return _isAvailable;
 };
 

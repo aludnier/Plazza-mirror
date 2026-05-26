@@ -2,7 +2,7 @@
 ** EPITECH PROJECT, 2026
 ** lineParser
 ** File description:
-** 
+** LineParser class
 */
 
 
@@ -11,9 +11,6 @@
     #include <string>
     #include <sstream>
     #include <vector>
-
-
-
 
 class LineParser
 {
@@ -27,12 +24,14 @@ public:
     LineParser();
     ~LineParser();
 
-    class ParserError : public std::exception {
+    class ParserError : public std::exception
+    {
         private:
             std::string _msg;
         public:
             ParserError(std::string msg): _msg("[LineParse Error] : " + msg) {};
-            const char *what() const noexcept override {
+            const char *what() const noexcept override
+            {
                 return _msg.data();
             };
     };
@@ -49,6 +48,5 @@ public:
 
     std::string &operator[](std::size_t index);
 };
-
 
 #endif
