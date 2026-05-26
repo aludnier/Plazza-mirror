@@ -43,7 +43,18 @@ class Kitchen
         std::size_t getPID() { return _process.getPid();};
         KitchenStatus getStatus() const;
         // std::shared_ptr<std::unordered_map<Plazza::Ingredient, size_t>> stock;
-        std::unordered_map<Plazza::Ingredient, size_t> stock;
+        std::unordered_map<Plazza::Ingredient, size_t> stock = {
+            {Plazza::Ingredient::DOUGH, 10},
+            {Plazza::Ingredient::TOMATO, 10},
+            {Plazza::Ingredient::GRUYERE, 10},
+            {Plazza::Ingredient::HAM, 10},
+            {Plazza::Ingredient::MUSHROOMS, 10},
+            {Plazza::Ingredient::STEAK, 10},
+            {Plazza::Ingredient::EGGPLANT, 10},
+            {Plazza::Ingredient::GOAT_CHEESE, 10},
+            {Plazza::Ingredient::CHIEF_LOVE, 10}
+        };
+
 };
 
 #endif /* !KITCHEN_HPP_ */
