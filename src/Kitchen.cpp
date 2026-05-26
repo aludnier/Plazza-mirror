@@ -7,13 +7,11 @@
 
 #include "Kitchen.hpp"
 
-Kitchen::Kitchen(std::size_t nbCooks, size_t mul) :
+Kitchen::Kitchen(std::size_t nbCooks, double mul, size_t time) :
     _nbCooks(nbCooks)
-
 {
-    for (size_t i = 0; i < nbCooks; i++){
-        _cooks.push_back(std::make_unique<Cook>(mul, stock));
-    }
+    for (size_t i = 0; i < nbCooks; i++)
+        _cooks.push_back(std::make_unique<Cook>(mul, stock, time));
     _process.startProcess([this](){run();});
 };
 
@@ -39,7 +37,7 @@ bool Kitchen::takeOrder(std::list<Plazza::PizzaOrder> &orders)
 void Kitchen::run()
 {
     int tmp = 0;
-    
+
     while (true) {
         Plazza::PizzaOrder order;
         try {
@@ -54,7 +52,6 @@ void Kitchen::run()
                     }
                 }
             }
-            
         } catch (const std::exception &e) {
             std::cout << e.what() << std::endl;
             continue;

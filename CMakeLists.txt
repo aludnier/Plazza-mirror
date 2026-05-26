@@ -12,6 +12,7 @@ set( PLAZZA_SOURCE
     ${PROJECT_SOURCE_DIR}/src/Order.cpp
     ${PROJECT_SOURCE_DIR}/src/IPC.cpp
     ${PROJECT_SOURCE_DIR}/src/ScopedLock.cpp
+    ${PROJECT_SOURCE_DIR}/src/ArgParser.cpp
 )
 
 

@@ -2,12 +2,13 @@
 ** EPITECH PROJECT, 2026
 ** order
 ** File description:
-** 
+**
 */
 
 #include "Order.hpp"
 
-namespace Plazza {
+namespace Plazza
+{
 
 std::vector<char> &operator<<(std::vector<char> &pack,const PizzaOrder &order)
 {
