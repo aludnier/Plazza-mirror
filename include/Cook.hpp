@@ -1,30 +1,41 @@
 /*
 ** EPITECH PROJECT, 2026
-** cook
+** plazza-mirror
 ** File description:
-** Cook class
+** Cook
 */
 
-#pragma once
+#ifndef COOK_HPP_
+    #define COOK_HPP_
+
 #include <thread>
 #include "Order.hpp"
 #include <iostream>
 #include <chrono>
+#include <unordered_map>
+#include <memory>
+#include <mutex>
+#include "ScopedLock.hpp"
 
 class Cook
 {
-private:
-    std::thread _thrd;
-    Plazza::PizzaOrder _currOrder;
-    bool _isAvailable;
-    size_t _mul;
+    private:
+        std::thread _thrd;
+        Plazza::PizzaOrder _currOrder;
+        bool _isAvailable;
+        size_t _mul;
+        std::unordered_map<Plazza::Ingredient, size_t> _stock;
+        Mutex _mutex;
 
-public:
-    Plazza::stock *_currStock;
-    Cook(size_t mul);
-    ~Cook();
+    public:
+        Plazza::stock *_currStock;
+        Cook(size_t mul, std::unordered_map<Plazza::Ingredient, size_t> &stock);
+        ~Cook();
 
-    void makePizza(Plazza::PizzaOrder pizza);
-    void cookPizza();
-    bool isAvailable() const;
+        void makePizza(Plazza::PizzaOrder pizza);
+        void cookPizza();
+        bool isAvailable() const;
+        bool useStock(const Plazza::PizzaOrder &order);
 };
+
+#endif /* !COOK_HPP_ */

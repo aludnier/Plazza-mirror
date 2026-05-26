@@ -1,23 +1,23 @@
+/*
+** EPITECH PROJECT, 2026
+** plazza-mirror
+** File description:
+** ScopedLock
+*/
 
+#ifndef SCOPEDLOCK_HPP_
+    #define SCOPEDLOCK_HPP_
 
 #include "Mutex.hpp"
 
 class ScopedLock
 {
-private:
-    Mutex *_mutex;
-public:
-    ScopedLock(Mutex &mutex);
-    ~ScopedLock();
+    private:
+        Mutex *_mutex;
+
+    public:
+        ScopedLock(Mutex &mutex);
+        ~ScopedLock();
 };
 
-ScopedLock::ScopedLock(Mutex &mutex):
-    _mutex(&mutex)
-{
-    _mutex->lock();
-}
-
-ScopedLock::~ScopedLock()
-{
-    _mutex->unlock();
-}
+#endif /* !SCOPEDLOCK_HPP_ */

@@ -26,7 +26,8 @@ IPC &IPC::operator<<(const std::string &msg)
     Buffer buff;
 
     buff.type = 1;
-    strncpy(buff.text, msg.c_str(), msg.size());
+    strncpy(buff.text, msg.c_str(), BUFFER_SIZE - 1);
+    buff.text[BUFFER_SIZE - 1] = '\0';
     if (msgsnd(_id, &buff, sizeof(buff.text), IPC_NOWAIT) == -1)
         throw IPCError("msgsnd failed.");
     return *this;
@@ -38,18 +39,20 @@ IPC &IPC::operator>>(std::string &msg)
 
     if (msgrcv(_id, &buff.text, sizeof(buff.text), 1, IPC_NOWAIT) == -1)
         throw IPCError("msgrcv failed.");
-    msg = buff.text;
+    msg = std::string(buff.text);
     return *this;
 }
 
 IPC &IPC::operator<<(const Plazza::PizzaOrder &order)
 {
     Buffer buff;
-    std::vector<char> tmp;
+    std::vector<char> pack;
 
     buff.type = 1;
-    tmp << order;
-    memcpy(buff.text, tmp.data(), tmp.size());
+    pack << order;
+    if (pack.size() > BUFFER_SIZE)
+        throw IPCError("Order too large for buffer.");
+    memcpy(buff.text, pack.data(), pack.size());
     if (msgsnd(_id, &buff, sizeof(buff.text), IPC_NOWAIT) == -1)
         throw IPCError("msgsnd failed.");
     return *this;
@@ -58,16 +61,11 @@ IPC &IPC::operator<<(const Plazza::PizzaOrder &order)
 IPC &IPC::operator>>(Plazza::PizzaOrder &order)
 {
     Buffer buff;
-    
-    buff.type = 1;
-    if (msgrcv(_id, &buff, sizeof(buff.text), 1, 0) == -1){
-        std::cout << "[IPC] Error" << std::endl;
+    ssize_t size = msgrcv(_id, &buff, sizeof(buff.text), 1, IPC_NOWAIT);
+
+    if (size == -1)
         throw IPCError("msgrcv failed.");
-    }
-    std::vector<char> tmp;
-    for (size_t i = 0; i < strlen(buff.text); i++) {
-        tmp.push_back(buff.text[i]);
-    }
-    tmp >> order;
+    std::vector<char> pack(buff.text, buff.text + size);
+    pack >> order;
     return *this;
 }
