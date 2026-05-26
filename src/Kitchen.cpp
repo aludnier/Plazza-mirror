@@ -38,10 +38,10 @@ bool Kitchen::takeOrder(std::list<Plazza::PizzaOrder> &orders)
 
 void Kitchen::run()
 {
-    Plazza::PizzaOrder order;
     int tmp = 0;
-
+    
     while (true) {
+        Plazza::PizzaOrder order;
         try {
             bool orderSend = false;
             _ipc >> order;

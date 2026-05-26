@@ -69,6 +69,5 @@ IPC &IPC::operator>>(Plazza::PizzaOrder &order)
     }
     std::vector<char> pack(buff.text, buff.text + strlen(buff.text));
     pack >> order;
-    std::cout << order << std::endl;
     return *this;
 }
