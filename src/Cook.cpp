@@ -28,12 +28,11 @@ void Cook::makePizza(Plazza::PizzaOrder pizza)
 
 void Cook::cookPizza()
 {
-    std::cout << "[Cook " << _thrd.get_id() << "] Making pizza type "
-        << _currOrder._type << " size " << _currOrder._size << "\n";
+    std::cout << "[Cook " << _thrd.get_id() << "] Making pizza type " << _currOrder << std::endl;
+    ScopedLock mut(_mutex);
     useStock(_currOrder);
     std::this_thread::sleep_for(
         std::chrono::milliseconds(_currOrder._cookTime * 1000 * _mul));
-    ScopedLock mut(_mutex);
     std::cout << "[Cook " << _thrd.get_id() << "] Done!\n";
     _isAvailable = true;
 };

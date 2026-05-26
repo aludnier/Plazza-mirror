@@ -61,11 +61,11 @@ IPC &IPC::operator<<(const Plazza::PizzaOrder &order)
 IPC &IPC::operator>>(Plazza::PizzaOrder &order)
 {
     Buffer buff;
-    ssize_t size = msgrcv(_id, &buff, sizeof(buff.text), 1, IPC_NOWAIT);
+    ssize_t size = msgrcv(_id, &buff, sizeof(buff.text), 1, 0);
 
     if (size == -1)
         throw IPCError("msgrcv failed.");
-    std::vector<char> pack(buff.text, buff.text + size);
+    std::vector<char> pack(buff.text, buff.text + strlen(buff.text));
     pack >> order;
     return *this;
 }
