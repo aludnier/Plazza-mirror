@@ -18,8 +18,7 @@
 struct Buffer
 {
     long type;
-    // char text[BUFFER_SIZE];
-    std::vector<char> text;
+    char text[BUFFER_SIZE];
 };
 
 class IPC

@@ -9,10 +9,12 @@
 
 Kitchen::Kitchen(std::size_t nbCooks, size_t mul) :
     _nbCooks(nbCooks)
+
 {
     for (size_t i = 0; i < nbCooks; i++) {
         _cooks.push_back(std::make_unique<Cook>(mul));
     }
+    _process.startProcess([this](){run();});
 };
 
 Kitchen::~Kitchen()

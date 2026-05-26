@@ -19,7 +19,7 @@ Cook::~Cook()
 
 void Cook::makePizza(Plazza::PizzaOrder pizza)
 {
-if (_thrd.joinable())
+    if (_thrd.joinable())
         _thrd.join();
 
     _isAvailable = false;
@@ -29,8 +29,7 @@ if (_thrd.joinable())
 
 void Cook::cookPizza()
 {
-    std::cout << "Cook " << _thrd.get_id() << " Making pizza type "
-        << _currOrder._type << " size " << _currOrder._size << "\n";
+    std::cout << "[Cook " << _thrd.get_id() << "] Making pizza type " << _currOrder << std::endl;
     std::this_thread::sleep_for(
         std::chrono::milliseconds(_currOrder._cookTime * 1000 * _mul));
     std::cout << "[Cook " << _thrd.get_id() << "] Done!\n";

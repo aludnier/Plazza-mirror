@@ -45,11 +45,10 @@ std::list<Plazza::PizzaOrder> Reception::parseOrder()
             std::cout << "wrong syntax : " << orderparser.getLine() << std::endl;
         }
     }
-    while (!orderlist.empty()) {
-        std::cout << orderlist.back() << std::endl;
-        orderlist.pop_back();
-    }
-    
+    // while (!orderlist.empty()) {
+        // std::cout << orderlist.back() << std::endl;
+        // orderlist.pop_back();
+    // }
     return orderlist;
 }
 
@@ -59,12 +58,14 @@ void Reception::run()
     std::list<Plazza::PizzaOrder> orders;
     std::string commandLine;
 
+    createKitchen(1);
     while (true) {
         _parser.readLineFrom(std::cin, ';');
         if (_parser.getLine() == "quit") {
             break;
         }
-        parseOrder();
+        std::list<Plazza::PizzaOrder> tmp = parseOrder();
+        _kitchens[0]->takeOrder(tmp);
     }
 };
 
