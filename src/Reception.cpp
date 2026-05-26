@@ -28,7 +28,7 @@ std::list<Plazza::PizzaOrder> Reception::parseOrder()
 {
     LineParser orderparser;
     std::list<Plazza::PizzaOrder> orderlist;
-
+ 
     for (auto order : _parser.getWords()) {
         orderparser.ParseLine(order);
         try {
@@ -37,6 +37,9 @@ std::list<Plazza::PizzaOrder> Reception::parseOrder()
             }
             orderparser[2].erase(0, 1);
             std::size_t nbPizza = std::atoi(orderparser[2].c_str());
+            if (_sizes[orderparser[1]] == 0){
+                throw std::exception();
+            }
             for (size_t i = 0; i < nbPizza; i++) {
                 orderlist.push_back(
                     _pizzaFunc[orderparser[0]](_sizes[orderparser[1]]));
