@@ -22,8 +22,8 @@ enum Ingredient
     MUSHROOMS = 16,
     STEAK = 32,
     EGGPLANT = 64,
-    GOAT_CHEESE = 128,
-    CHIEF_LOVE = 256
+    GOAT_CHEESE = 126,
+    CHIEF_LOVE = 127
 };
 
 enum PizzaType {
