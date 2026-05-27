@@ -42,10 +42,6 @@ bool Kitchen::runOut()
 {
     auto clockNow = std::chrono::system_clock::now();
 
-    // std::cout
-    //     << std::chrono::system_clock::to_time_t(std::chrono::system_clock::now()) << " : "
-    //     << std::chrono::system_clock::to_time_t(_timeOut) << std::endl;
-
     if (clockNow > _timeOut){
         return true;
     }
@@ -61,7 +57,6 @@ void Kitchen::run()
         bool orderSend = false;
 
         try {
-            // std::cout << "read" << std::endl;
             _ipc >> order;
         } catch(const std::exception& e) {
             continue;
@@ -72,10 +67,6 @@ void Kitchen::run()
                     cook->makePizza(order);
                     orderSend = true;
                     _timeOut = std::chrono::system_clock::now() + std::chrono::seconds(5) + std::chrono::seconds(order._cookTime);
-                    // std::cout
-                    //  << std::chrono::system_clock::to_time_t(std::chrono::system_clock::now()) << " : "
-                    //  << std::chrono::system_clock::to_time_t(_timeOut)
-                    //  << "| + " << 5 + order._cookTime << std::endl;
                     break;
                 }
             }
