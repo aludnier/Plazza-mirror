@@ -104,13 +104,13 @@ std::ostream &operator<<(std::ostream &s ,const PizzaOrder &order)
         s << "XXL";
         break;
     }
-    s << std::endl << "Recipe : ";
-    std::list<Ingredient> recipe = order._recipe;
-    while (!recipe.empty())
-    {
-        s << recipe.back() << ", ";
-        recipe.pop_back();
-    }
+    // s << std::endl << "Recipe : ";
+    // std::list<Ingredient> recipe = order._recipe;
+    // while (!recipe.empty())
+    // {
+    //     s << recipe.back() << ", ";
+    //     recipe.pop_back();
+    // }
     return s;
 }
 }
