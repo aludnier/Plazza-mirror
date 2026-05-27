@@ -19,6 +19,7 @@
 
 struct KitchenStatus
 {
+    bool is_alive;
     size_t occupancy;
     std::unordered_map<Plazza::Ingredient, size_t> remaining_stock;
 };
@@ -34,6 +35,8 @@ class Kitchen
         std::queue<Plazza::PizzaOrder> _waitingOrders;
         IPC _ipc;
         std::chrono::time_point<std::chrono::system_clock> _timeOut;
+        bool _isAlive;
+        Mutex _stockMutex;
 
     public:
         Kitchen(size_t nbCooks, double mul, size_t time);

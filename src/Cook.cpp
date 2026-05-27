@@ -8,8 +8,8 @@
 #include "Cook.hpp"
 
 Cook::Cook(double mul, std::unordered_map<Plazza::Ingredient, size_t> &stock,
-    size_t time)
-    : _isAvailable(true), _mul(mul), _stock(stock), _time(time)
+    size_t time, Mutex &stockMutex)
+    : _isAvailable(true), _mul(mul), _stock(stock), _mutex(stockMutex), _time(time)
 {
 }
 
@@ -32,8 +32,10 @@ void Cook::makePizza(Plazza::PizzaOrder pizza)
 void Cook::cookPizza()
 {
     std::cout << "[Cook " << _thrd.get_id() << "] Making pizza type " << _currOrder << std::endl;
-    ScopedLock mut(_mutex);
-    useStock(_currOrder);
+    {
+        ScopedLock mut(_mutex);
+        useStock(_currOrder);
+    }
     std::this_thread::sleep_for(
         std::chrono::milliseconds(_currOrder._cookTime * _time * _mul));
     std::cout << "[Cook " << _thrd.get_id() << "] Done!\n";

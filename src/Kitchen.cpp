@@ -13,7 +13,7 @@ Kitchen::Kitchen(std::size_t nbCooks, double mul, size_t time) :
     _timeOut(std::chrono::system_clock::now() + std::chrono::seconds(5))
 {
     for (size_t i = 0; i < nbCooks; i++)
-        _cooks.push_back(std::make_unique<Cook>(mul, stock, time));
+        _cooks.push_back(std::make_unique<Cook>(mul, stock, time, _stockMutex));
     _process.startProcess([this](){run();});
 };
 
@@ -64,12 +64,16 @@ void Kitchen::run()
                 if (cook->isAvailable()) {
                     cook->makePizza(order);
                     orderSend = true;
-                    _timeOut = std::chrono::system_clock::now() + std::chrono::seconds(5) + std::chrono::seconds(order._cookTime);
+                    _timeOut = std::chrono::system_clock::now() + std::chrono::seconds(5);
                     break;
                 }
             }
         }
     }
+    for (auto &thrd : _cooks) {
+        thrd->~Cook();
+    }
+    _isAlive = false;
 }
 
 KitchenStatus Kitchen::getStatus() const
@@ -79,5 +83,5 @@ KitchenStatus Kitchen::getStatus() const
     for (auto &cook : _cooks)
         if (cook.get()->isAvailable())
             free_cooks++;
-    return {free_cooks, stock};
+    return {_isAlive, free_cooks, stock};
 }

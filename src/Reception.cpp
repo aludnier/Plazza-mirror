@@ -46,19 +46,55 @@ std::list<Plazza::PizzaOrder> Reception::parseOrder()
     return orderlist;
 }
 
+
+void Reception::cleanKitchen()
+{
+    for (auto it = _kitchens.begin(); it != _kitchens.end();) {
+        if (!(*it)->getStatus().is_alive)
+            it = _kitchens.erase(it);
+        else
+            ++it;
+    }
+}
+
+void Reception::sendOrder(std::list<Plazza::PizzaOrder> &orderList)
+{
+    if (_kitchens.empty()) {
+        createKitchen(orderList.size());
+    }
+    while (!orderList.empty()) {
+        auto bestKitchen = _kitchens.end();
+        size_t maxCook = 0;
+
+        for (auto it = _kitchens.begin(); it != _kitchens.end(); ++it) {
+            KitchenStatus status = (*it)->getStatus();
+            if (status.occupancy > maxCook) {
+                maxCook = status.occupancy;
+                bestKitchen = it;
+            }
+        }
+        if (bestKitchen == _kitchens.end() || maxCook == 0) {
+            createKitchen(1);
+        }
+        std::list<Plazza::PizzaOrder> order;
+        order.push_back(orderList.front());
+        orderList.pop_front();
+        (*bestKitchen)->takeOrder(order);
+    }
+}
+
 void Reception::run()
 {
     Plazza::PizzaOrder order = {Plazza::Regina, Plazza::S};
     std::list<Plazza::PizzaOrder> orders;
     std::string commandLine;
 
-    createKitchen(1);
     while (true) {
         _parser.readLineFrom(std::cin, ';');
         if (_parser.getLine() == "quit")
             break;
         std::list<Plazza::PizzaOrder> tmp = parseOrder();
-        _kitchens[0]->takeOrder(tmp);
+        sendOrder(tmp);
     }
 };
 
@@ -66,6 +102,5 @@ void Reception::createKitchen(std::size_t nbKitchen)
 {
     for (std::size_t i = 0; i < nbKitchen; i++) {
         _kitchens.push_back(std::make_unique<Kitchen>(_nbCooks, _mul, _time));
-        sleep(2);
     }
 }
