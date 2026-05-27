@@ -17,7 +17,6 @@ IPC::IPC()
 
 IPC::~IPC()
 {
-    std::cout << "[IPC] destroy queue" << std::endl;
     msgctl(_id, IPC_RMID, nullptr);
 }
 
@@ -62,7 +61,7 @@ IPC &IPC::operator<<(const Plazza::PizzaOrder &order)
 IPC &IPC::operator>>(Plazza::PizzaOrder &order)
 {
     Buffer buff;
-    ssize_t size = msgrcv(_id, &buff, sizeof(buff.text), 1, 0);
+    ssize_t size = msgrcv(_id, &buff, sizeof(buff.text), 1, IPC_NOWAIT);
 
     if (size == -1)
         throw IPCError("msgrcv failed.");

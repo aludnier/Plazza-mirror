@@ -8,7 +8,9 @@
 #include "Kitchen.hpp"
 
 Kitchen::Kitchen(std::size_t nbCooks, double mul, size_t time) :
-    _nbCooks(nbCooks)
+    _timeMult(mul),
+    _nbCooks(nbCooks),
+    _timeOut(std::chrono::system_clock::now() + std::chrono::seconds(5))
 {
     for (size_t i = 0; i < nbCooks; i++)
         _cooks.push_back(std::make_unique<Cook>(mul, stock, time));
@@ -34,27 +36,38 @@ bool Kitchen::takeOrder(std::list<Plazza::PizzaOrder> &orders)
     return true;
 };
 
+bool Kitchen::runOut()
+{
+    auto clockNow = std::chrono::system_clock::now();
+
+    if (clockNow > _timeOut){
+        return true;
+    }
+    return false;
+}
+
 void Kitchen::run()
 {
     int tmp = 0;
-
-    while (true) {
+    
+    while (!runOut()) {
         Plazza::PizzaOrder order;
+        bool orderSend = false;
+
         try {
-            bool orderSend = false;
             _ipc >> order;
-            while (!orderSend) {
-                for (auto &cook : _cooks) {
-                    if (cook->isAvailable()) {
-                        cook->makePizza(order);
-                        orderSend = true;
-                        break;
-                    }
+        } catch(const std::exception& e) {
+            continue;
+        }
+        while (!orderSend) {
+            for (auto &cook : _cooks) {
+                if (cook->isAvailable()) {
+                    cook->makePizza(order);
+                    orderSend = true;
+                    _timeOut = std::chrono::system_clock::now() + std::chrono::seconds(5) + std::chrono::seconds(order._cookTime);
+                    break;
                 }
             }
-        } catch (const std::exception &e) {
-            std::cout << e.what() << std::endl;
-            continue;
         }
     }
 }
