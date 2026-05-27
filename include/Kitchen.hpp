@@ -36,7 +36,7 @@ class Kitchen
         std::chrono::time_point<std::chrono::system_clock> _timeOut;
 
     public:
-        Kitchen(size_t nbCooks, size_t mul);
+        Kitchen(size_t nbCooks, double mul, size_t time);
         ~Kitchen();
 
         bool takeOrder(std::list<Plazza::PizzaOrder> &orders);
@@ -45,7 +45,6 @@ class Kitchen
         bool runOut();
         std::size_t getPID() { return _process.getPid();};
         KitchenStatus getStatus() const;
-        // std::shared_ptr<std::unordered_map<Plazza::Ingredient, size_t>> stock;
         std::unordered_map<Plazza::Ingredient, size_t> stock = {
             {Plazza::Ingredient::DOUGH, 10},
             {Plazza::Ingredient::TOMATO, 10},

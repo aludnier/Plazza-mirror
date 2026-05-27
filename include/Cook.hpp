@@ -26,10 +26,11 @@ class Cook
         size_t _mul;
         std::unordered_map<Plazza::Ingredient, size_t> _stock;
         Mutex _mutex;
+        size_t _time;
 
     public:
-        Plazza::stock *_currStock;
-        Cook(size_t mul, std::unordered_map<Plazza::Ingredient, size_t> &stock);
+        Cook(double mul, std::unordered_map<Plazza::Ingredient, size_t> &stock,
+            size_t time);
         ~Cook();
 
         void makePizza(Plazza::PizzaOrder pizza);

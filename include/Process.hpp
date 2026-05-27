@@ -1,26 +1,26 @@
 /*
 ** EPITECH PROJECT, 2026
-** process
+** plazza-mirror
 ** File description:
-** 
+** Process
 */
 
-#pragma once
-#include <unistd.h>
-#include <exception>
-#include <sys/wait.h>
+#ifndef PROCESS_HPP_
+    #define PROCESS_HPP_
+    #include <unistd.h>
+    #include <exception>
+    #include <sys/wait.h>
 
 template <typename Func>
 class Process
 {
 private:
     pid_t _pid;
+
 public:
-
-
     Process() {};
     ~Process() = default;
-    void startProcess(Func function) 
+    void startProcess(Func function)
     {
         _pid = fork();
         if (_pid == 0) {
@@ -34,3 +34,5 @@ public:
         while (waitpid(_pid, &status , WUNTRACED | WIFSTOPPED(status)) > 0);
     };
 };
+
+#endif /* !PROCESS_HPP_ */

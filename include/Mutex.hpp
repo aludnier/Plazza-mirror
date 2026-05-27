@@ -1,18 +1,26 @@
+/*
+** EPITECH PROJECT, 2026
+** plazza-mirror
+** File description:
+** Mutex
+*/
 
-#pragma once
+#ifndef MUTEX_HPP_
+    #define MUTEX_HPP_
 
-extern "C"{
+extern "C"
+{
     #include <pthread.h>
 }
 
-class IMutex {
+class IMutex
+{
     public:
         virtual ~IMutex() = default;
         virtual void lock() = 0;
         virtual void unlock() = 0;
         virtual void trylock() = 0;
 };
-
 
 class Mutex : public IMutex
 {
@@ -26,4 +34,4 @@ public:
     void trylock() override { pthread_mutex_trylock(&_mutex); };
 };
 
-
+#endif /* !MUTEX_HPP_ */

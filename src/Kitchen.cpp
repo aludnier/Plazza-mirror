@@ -7,15 +7,13 @@
 
 #include "Kitchen.hpp"
 
-Kitchen::Kitchen(std::size_t nbCooks, size_t mul) :
+Kitchen::Kitchen(std::size_t nbCooks, double mul, size_t time) :
     _timeMult(mul),
     _nbCooks(nbCooks),
     _timeOut(std::chrono::system_clock::now() + std::chrono::seconds(5))
-
 {
-    for (size_t i = 0; i < nbCooks; i++){
-        _cooks.push_back(std::make_unique<Cook>(mul, stock));
-    }
+    for (size_t i = 0; i < nbCooks; i++)
+        _cooks.push_back(std::make_unique<Cook>(mul, stock, time));
     _process.startProcess([this](){run();});
 };
 
