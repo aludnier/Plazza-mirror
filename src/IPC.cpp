@@ -17,7 +17,6 @@ IPC::IPC()
 
 IPC::~IPC()
 {
-    std::cout << "[IPC] destroy queue" << std::endl;
     msgctl(_id, IPC_RMID, nullptr);
 }
 

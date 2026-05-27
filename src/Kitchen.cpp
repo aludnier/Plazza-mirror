@@ -72,7 +72,6 @@ void Kitchen::run()
             }
         }
     }
-    std::cout << "destroy _______________________" << std::endl;
 }
 
 KitchenStatus Kitchen::getStatus() const
