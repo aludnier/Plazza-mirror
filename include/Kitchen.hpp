@@ -26,12 +26,14 @@ struct KitchenStatus
 class Kitchen
 {
     private:
+        double _timeMult;
         Process<std::function<void()>> _process;
         std::size_t _nbCooks;
         std::vector<std::unique_ptr<Cook>> _cooks;
         std::size_t _currLoad;
         std::queue<Plazza::PizzaOrder> _waitingOrders;
         IPC _ipc;
+        std::chrono::time_point<std::chrono::system_clock> _timeOut;
 
     public:
         Kitchen(size_t nbCooks, size_t mul);
@@ -40,6 +42,7 @@ class Kitchen
         bool takeOrder(std::list<Plazza::PizzaOrder> &orders);
         void sendPizza(Plazza::PizzaOrder &order);
         void run();
+        bool runOut();
         std::size_t getPID() { return _process.getPid();};
         KitchenStatus getStatus() const;
         // std::shared_ptr<std::unordered_map<Plazza::Ingredient, size_t>> stock;

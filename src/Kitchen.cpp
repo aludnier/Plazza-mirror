@@ -8,7 +8,9 @@
 #include "Kitchen.hpp"
 
 Kitchen::Kitchen(std::size_t nbCooks, size_t mul) :
-    _nbCooks(nbCooks)
+    _timeMult(mul),
+    _nbCooks(nbCooks),
+    _timeOut(std::chrono::system_clock::now() + std::chrono::seconds(5))
 
 {
     for (size_t i = 0; i < nbCooks; i++){
@@ -36,30 +38,50 @@ bool Kitchen::takeOrder(std::list<Plazza::PizzaOrder> &orders)
     return true;
 };
 
+bool Kitchen::runOut()
+{
+    auto clockNow = std::chrono::system_clock::now();
+
+    // std::cout
+    //     << std::chrono::system_clock::to_time_t(std::chrono::system_clock::now()) << " : "
+    //     << std::chrono::system_clock::to_time_t(_timeOut) << std::endl;
+
+    if (clockNow > _timeOut){
+        return true;
+    }
+    return false;
+}
+
 void Kitchen::run()
 {
     int tmp = 0;
     
-    while (true) {
+    while (!runOut()) {
         Plazza::PizzaOrder order;
+        bool orderSend = false;
+
         try {
-            bool orderSend = false;
+            // std::cout << "read" << std::endl;
             _ipc >> order;
-            while (!orderSend) {
-                for (auto &cook : _cooks) {
-                    if (cook->isAvailable()) {
-                        cook->makePizza(order);
-                        orderSend = true;
-                        break;
-                    }
-                }
-            }
-            
-        } catch (const std::exception &e) {
-            std::cout << e.what() << std::endl;
+        } catch(const std::exception& e) {
             continue;
         }
+        while (!orderSend) {
+            for (auto &cook : _cooks) {
+                if (cook->isAvailable()) {
+                    cook->makePizza(order);
+                    orderSend = true;
+                    _timeOut = std::chrono::system_clock::now() + std::chrono::seconds(5) + std::chrono::seconds(order._cookTime);
+                    // std::cout
+                    //  << std::chrono::system_clock::to_time_t(std::chrono::system_clock::now()) << " : "
+                    //  << std::chrono::system_clock::to_time_t(_timeOut)
+                    //  << "| + " << 5 + order._cookTime << std::endl;
+                    break;
+                }
+            }
+        }
     }
+    std::cout << "destroy _______________________" << std::endl;
 }
 
 KitchenStatus Kitchen::getStatus() const
