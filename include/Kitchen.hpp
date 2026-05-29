@@ -17,6 +17,7 @@
     #include "Process.hpp"
     #include <functional>
     #include "KitchenStatus.hpp"
+    #define TIMEOUT 30
 
 class Kitchen
 {

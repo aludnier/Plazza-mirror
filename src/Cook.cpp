@@ -34,7 +34,13 @@ void Cook::cookPizza()
     std::cout << "[Cook " << _thrd.get_id() << "] Making pizza type " << _currOrder << std::endl;
     {
         ScopedLock mut(_mutex);
-        useStock(_currOrder);
+        while (!useStock(_currOrder)) {
+            _mutex.unlock();
+            std::this_thread::sleep_for(std::chrono::milliseconds(_time));
+            _mutex.lock();
+            for (auto &[ingr, cnt] : _stock)
+                cnt++;
+        }
     }
     std::this_thread::sleep_for(
         std::chrono::milliseconds(_currOrder._cookTime * _time * _mul));

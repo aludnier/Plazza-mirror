@@ -59,10 +59,8 @@ void Reception::cleanKitchen()
 
 void Reception::sendOrder(std::list<Plazza::PizzaOrder> &orderList)
 {
-    size_t maxCook;
-
     if (_kitchens.empty())
-        createKitchen(orderList.size());
+        createKitchen(1);
     while (!orderList.empty()) {
         auto bestKitchen = _kitchens.end();
         for (auto it = _kitchens.begin(); it != _kitchens.end(); ++it) {
@@ -71,7 +69,7 @@ void Reception::sendOrder(std::list<Plazza::PizzaOrder> &orderList)
                 break;
             }
         }
-        if (bestKitchen == _kitchens.end() || maxCook == 0) {
+        if (bestKitchen == _kitchens.end()) {
             createKitchen(1);
             bestKitchen = std::prev(_kitchens.end());
         }

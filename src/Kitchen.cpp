@@ -12,7 +12,7 @@ Kitchen::Kitchen(std::size_t nbCooks, double mul, size_t time) :
     _nbCooks(nbCooks),
     _isAlive(true),
     _currLoad(0),
-    _timeOut(std::chrono::system_clock::now() + std::chrono::seconds(5))
+    _timeOut(std::chrono::system_clock::now() + std::chrono::seconds(TIMEOUT))
 {
     for (size_t i = 0; i < nbCooks; i++)
         _cooks.push_back(std::make_unique<Cook>(mul, stock, time, _stockMutex));
@@ -60,7 +60,7 @@ void Kitchen::run()
             _statusReq >> msg;
             if (msg == "status") {
                 _statusReply << buildStatus();
-                _timeOut = std::chrono::system_clock::now() + std::chrono::seconds(5);
+                _timeOut = std::chrono::system_clock::now() + std::chrono::seconds(TIMEOUT);
             } else if (msg == "quit") {
                 break;
             }
@@ -72,24 +72,24 @@ void Kitchen::run()
         } catch (...) {
             continue;
         }
-        _timeOut = std::chrono::system_clock::now() + std::chrono::seconds(5);
+        _timeOut = std::chrono::system_clock::now() + std::chrono::seconds(TIMEOUT);
         while (!orderSend) {
             try {
                 _statusReq >> msg;
                 if (msg == "status") {
                     _statusReply << buildStatus();
-                    _timeOut = std::chrono::system_clock::now() + std::chrono::seconds(5);
+                    _timeOut = std::chrono::system_clock::now() + std::chrono::seconds(TIMEOUT);
                 }
             } catch (...) {}
             for (auto &cook : _cooks) {
                 if (cook->isAvailable()) {
                     cook->makePizza(order);
                     orderSend = true;
-                    _timeOut = std::chrono::system_clock::now() + std::chrono::seconds(5);
+                    _timeOut = std::chrono::system_clock::now() + std::chrono::seconds(TIMEOUT);
                     break;
                 }
             }
-            std::this_thread::sleep_for(std::chrono::milliseconds(10));
+            std::this_thread::sleep_for(std::chrono::milliseconds(TIMEOUT));
         }
     }
     for (auto &thrd : _cooks)
