@@ -24,7 +24,7 @@ class Cook
         Plazza::PizzaOrder _currOrder;
         bool _isAvailable;
         size_t _mul;
-        std::unordered_map<Plazza::Ingredient, size_t> _stock;
+        std::unordered_map<Plazza::Ingredient, size_t> &_stock;
         Mutex &_mutex;
         size_t _time;
 

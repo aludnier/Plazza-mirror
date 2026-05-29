@@ -16,13 +16,7 @@
     #include <memory>
     #include "Process.hpp"
     #include <functional>
-
-struct KitchenStatus
-{
-    bool is_alive;
-    size_t occupancy;
-    std::unordered_map<Plazza::Ingredient, size_t> remaining_stock;
-};
+    #include "KitchenStatus.hpp"
 
 class Kitchen
 {
@@ -34,6 +28,8 @@ class Kitchen
         std::size_t _currLoad;
         std::queue<Plazza::PizzaOrder> _waitingOrders;
         IPC _ipc;
+        IPC _statusReq;
+        IPC _statusReply;
         std::chrono::time_point<std::chrono::system_clock> _timeOut;
         bool _isAlive;
         Mutex _stockMutex;
@@ -47,7 +43,10 @@ class Kitchen
         void run();
         bool runOut();
         std::size_t getPID() { return _process.getPid();};
-        KitchenStatus getStatus() const;
+        KitchenStatus getStatus();
+        KitchenStatus buildStatus();
+        bool hasCapacity() const { return _currLoad < 2 * _nbCooks; }
+        void stop();
         std::unordered_map<Plazza::Ingredient, size_t> stock = {
             {Plazza::Ingredient::DOUGH, 10},
             {Plazza::Ingredient::TOMATO, 10},
@@ -59,7 +58,6 @@ class Kitchen
             {Plazza::Ingredient::GOAT_CHEESE, 10},
             {Plazza::Ingredient::CHIEF_LOVE, 10}
         };
-
 };
 
 #endif /* !KITCHEN_HPP_ */

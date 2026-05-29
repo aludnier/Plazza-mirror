@@ -13,6 +13,7 @@
     #include <sys/ipc.h>
     #include <string.h>
     #include <vector>
+    #include "KitchenStatus.hpp"
     #define BUFFER_SIZE 512
 
 struct Buffer
@@ -35,6 +36,8 @@ class IPC
         IPC &operator>>(std::string &msg);
         IPC &operator<<(const Plazza::PizzaOrder &order);
         IPC &operator>>(Plazza::PizzaOrder &order);
+        IPC &operator<<(const KitchenStatus &status);
+        IPC &operator>>(KitchenStatus &status);
 
         class IPCError : public std::exception {
             private:

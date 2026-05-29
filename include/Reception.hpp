@@ -29,6 +29,7 @@ public:
     void createKitchen(std::size_t nbKitchen);
     void sendOrder(std::list<Plazza::PizzaOrder> &orderList);
     void cleanKitchen();
+    void printStatus();
 
 private:
     std::size_t _nbCooks;
