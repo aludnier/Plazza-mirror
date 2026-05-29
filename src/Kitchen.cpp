@@ -10,7 +10,9 @@
 Kitchen::Kitchen(std::size_t nbCooks, double mul, size_t time) :
     _timeMult(mul),
     _nbCooks(nbCooks),
-    _timeOut(std::chrono::system_clock::now() + std::chrono::seconds(5))
+    _isAlive(true),
+    _currLoad(0),
+    _timeOut(std::chrono::system_clock::now() + std::chrono::seconds(TIMEOUT))
 {
     for (size_t i = 0; i < nbCooks; i++)
         _cooks.push_back(std::make_unique<Cook>(mul, stock, time, _stockMutex));
@@ -31,6 +33,7 @@ bool Kitchen::takeOrder(std::list<Plazza::PizzaOrder> &orders)
     while (!orders.empty()) {
         order = orders.back();
         orders.pop_back();
+        _currLoad++;
         _ipc << order;
     }
     return true;
@@ -49,39 +52,74 @@ bool Kitchen::runOut()
 void Kitchen::run()
 {
     int tmp = 0;
-    
-    while (!runOut()) {
-        Plazza::PizzaOrder order;
-        bool orderSend = false;
+    bool orderSend;
 
+    while (!runOut()) {
+        std::string msg;
+        try {
+            _statusReq >> msg;
+            if (msg == "status") {
+                _statusReply << buildStatus();
+                _timeOut = std::chrono::system_clock::now() + std::chrono::seconds(TIMEOUT);
+            } else if (msg == "quit") {
+                break;
+            }
+        } catch (...) {}
+        Plazza::PizzaOrder order;
+        orderSend = false;
         try {
             _ipc >> order;
-        } catch(const std::exception& e) {
+        } catch (...) {
             continue;
         }
+        _timeOut = std::chrono::system_clock::now() + std::chrono::seconds(TIMEOUT);
         while (!orderSend) {
+            try {
+                _statusReq >> msg;
+                if (msg == "status") {
+                    _statusReply << buildStatus();
+                    _timeOut = std::chrono::system_clock::now() + std::chrono::seconds(TIMEOUT);
+                }
+            } catch (...) {}
             for (auto &cook : _cooks) {
                 if (cook->isAvailable()) {
                     cook->makePizza(order);
                     orderSend = true;
-                    _timeOut = std::chrono::system_clock::now() + std::chrono::seconds(5);
+                    _timeOut = std::chrono::system_clock::now() + std::chrono::seconds(TIMEOUT);
                     break;
                 }
             }
+            std::this_thread::sleep_for(std::chrono::milliseconds(TIMEOUT));
         }
     }
-    for (auto &thrd : _cooks) {
+    for (auto &thrd : _cooks)
         thrd->~Cook();
-    }
     _isAlive = false;
 }
 
-KitchenStatus Kitchen::getStatus() const
+KitchenStatus Kitchen::buildStatus()
 {
     size_t free_cooks = 0;
-
     for (auto &cook : _cooks)
-        if (cook.get()->isAvailable())
+        if (cook->isAvailable())
             free_cooks++;
     return {_isAlive, free_cooks, stock};
+}
+
+KitchenStatus Kitchen::getStatus()
+{
+    KitchenStatus status;
+
+    if (!_isAlive)
+        return {false, 0, {}};
+    _statusReq << std::string("status");
+    _statusReply >> status;
+    if (!status.is_alive)
+        _isAlive = false;
+    return status;
+}
+
+void Kitchen::stop()
+{
+    _statusReq << std::string("quit");
 }

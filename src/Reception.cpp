@@ -59,27 +59,42 @@ void Reception::cleanKitchen()
 
 void Reception::sendOrder(std::list<Plazza::PizzaOrder> &orderList)
 {
-    if (_kitchens.empty()) {
-        createKitchen(orderList.size());
-    }
+    if (_kitchens.empty())
+        createKitchen(1);
     while (!orderList.empty()) {
         auto bestKitchen = _kitchens.end();
-        size_t maxCook = 0;
-
         for (auto it = _kitchens.begin(); it != _kitchens.end(); ++it) {
-            KitchenStatus status = (*it)->getStatus();
-            if (status.occupancy > maxCook) {
-                maxCook = status.occupancy;
+            if ((*it)->hasCapacity()) {
                 bestKitchen = it;
+                break;
             }
         }
-        if (bestKitchen == _kitchens.end() || maxCook == 0) {
+        if (bestKitchen == _kitchens.end()) {
             createKitchen(1);
+            bestKitchen = std::prev(_kitchens.end());
         }
         std::list<Plazza::PizzaOrder> order;
         order.push_back(orderList.front());
         orderList.pop_front();
         (*bestKitchen)->takeOrder(order);
+    }
+}
+
+void Reception::printStatus()
+{
+    if (_kitchens.empty()) {
+        std::cout << "No kitchens currently active." << std::endl;
+        return;
+    }
+    for (size_t i = 0; i < _kitchens.size(); i++) {
+        KitchenStatus status = _kitchens[i]->getStatus();
+        std::cout << "=== Kitchen " << i + 1 << " ===" << std::endl;
+        std::cout << "  Alive: " << (status.is_alive ? "yes" : "no") << std::endl;
+        std::cout << "  Free cooks: " << status.occupancy << std::endl;
+        std::cout << "  Stock:" << std::endl;
+        for (const auto &[ingredient, qty] : status.remaining_stock) {
+            std::cout << "    " << ingredient << ": " << qty << std::endl;
+        }
     }
 }
 
@@ -91,8 +106,15 @@ void Reception::run()
 
     while (true) {
         _parser.readLineFrom(std::cin, ';');
-        if (_parser.getLine() == "quit")
+        if (_parser.getLine() == "quit") {
+            for (auto &kitchen : _kitchens)
+                kitchen->stop();
             break;
+        }
+        if (_parser.getLine() == "status") {
+            printStatus();
+            continue;
+        }
         std::list<Plazza::PizzaOrder> tmp = parseOrder();
         sendOrder(tmp);
     }
